@@ -12,8 +12,8 @@ def bookdisplay():
         ------------------------------------
         """)
 
-done = 0
 
+print("========================================")
 print("========================================")
 print("Welcome to the Student Gradebook Manager")
 while True:
@@ -24,4 +24,4 @@ while True:
     gradeBook[tname] = tgrade
 
 bookdisplay()
-print(gradeBook)
+print(gradeBook)    
