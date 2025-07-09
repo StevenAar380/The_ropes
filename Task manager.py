@@ -1,14 +1,25 @@
-#Random Selector
-import random
-done = 0
-list = []
+#Project: Student Gradebook Manager
 
-print("Hello there")
-while done != 1:
-    temp = input("Enter name (type null when complete!) >>> ")
-    list.append(temp)
-    print(list)
-    if temp.lower() == "null":
-        done = 1
-        rand = random.randint(0,len(list))
-        print("Your random person is", list[rand])
+gradeBook = {
+}
+
+
+def bookdisplay():
+    print(f"""
+    ====================================
+    Name: {gradeBook.get("name","N/A")}
+    Grade: {gradeBook.get("grade","N/A")}
+    =====================================
+    """)
+
+
+
+print("========================================")
+print("Welcome to the Student Gradebook Manager")
+thename = input("enter the name>>> ")
+gradeBook.update({"name":thename})
+thegrade = input("Enter the grade>>> ")
+gradeBook.update({"grade": thegrade})
+
+bookdisplay()
+    
