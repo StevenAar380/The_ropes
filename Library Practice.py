@@ -13,4 +13,5 @@ print(f"you are in the {numb}th {random.choice(teams)} squad")
 random.shuffle(teams)
 for team in teams:
     print(team)
+    sys.exit()
 
