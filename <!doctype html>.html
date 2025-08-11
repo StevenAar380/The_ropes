@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>F1 at Silverstone – Single-File 3D (Three.js + cannon-es)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<style>
+  html,body{margin:0;height:100%;background:#0b0e13;color:#eaeef5;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  #hud{position:fixed;left:16px;top:12px;z-index:10;user-select:none}
+  #hud .panel{background:rgba(10,14,20,.6);backdrop-filter:blur(6px);padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:8px}
+  #hud .big{font-size:22px;font-weight:700;letter-spacing:.4px}
+  #hud .small{font-size:12px;opacity:.85}
+  #centerMsg{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:18px;background:rgba(0,0,0,.45);padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);display:none}
+  #help{position:fixed;right:16px;top:12px;background:rgba(10,14,20,.6);backdrop-filter:blur(6px);padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;font-size:12px;line-height:1.5}
+  a{color:#9fd3ff;text-decoration:none}
+  canvas{display:block}
+</style>
+</head>
+<body>
+<div id="hud">
+  <div class="panel big"><span id="speed">0</span> km/h</div>
+  <div class="panel small">
+    Lap: <span id="lap">0</span> / Time: <span id="lapTime">00:00.000</span><br/>
+    Best: <span id="bestLap">--:--.---</span> · Gear: <span id="gear">N</span> · RPM: <span id="rpm">0</span>
+  </div>
+</div>
+<div id="help">
+  <b>Controls</b><br/>
+  W/S throttle & brake · A/D steer · Space handbrake<br/>
+  C camera · R reset · P pause
+</div>
+<div id="centerMsg"></div>
+
+<script type="module">
+// ===== Imports (CDN) =====
+import * as THREE from 'https://unpkg.com/three@0.159.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.159.0/examples/jsm/controls/OrbitControls.js';
+import * as CANNON from 'https://cdn.skypack.dev/cannon-es@0.20.0';
+
+// ====== Scene/Renderer ======
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0e13);
+
+// Soft gradient sky
+{
+  const skyGeo = new THREE.SphereGeometry(5000,32,16);
+  const skyMat = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: { top:{value:new THREE.Color(0x0b0e13)}, bottom:{value:new THREE.Color(0x20324a)} },
+    vertexShader: `varying vec3 vPos; void main(){vPos=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`uniform vec3 top; uniform vec3 bottom; varying vec3 vPos;
+      void main(){ float h = normalize(vPos).y*.5+.5; gl_FragColor=vec4(mix(bottom, top, pow(h,1.5)),1.0); }`
+  });
+  const sky = new THREE.Mesh(skyGeo, skyMat);
+  scene.add(sky);
+}
+
+// Lights
+const hemi = new THREE.HemisphereLight(0xcad8ff, 0x1b2430, 0.8);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+sun.position.set(200, 400, 100);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left = -600; sun.shadow.camera.right = 600;
+sun.shadow.camera.top = 600;  sun.shadow.camera.bottom = -600;
+scene.add(sun);
+
+// ===== Physics World =====
+const world = new CANNON.World({
+  gravity: new CANNON.Vec3(0, -9.82, 0)
+});
+world.broadphase = new CANNON.SAPBroadphase(world);
+world.allowSleep = true;
+const physicsMat = {
+  track: new CANNON.Material('track'),
+  tire:  new CANNON.Material('tire'),
+  wall:  new CANNON.Material('wall'),
+};
+world.addContactMaterial(new CANNON.ContactMaterial(physicsMat.tire, physicsMat.track, { friction: 1.2, restitution: 0.0, contactEquationStiffness: 1e7 }));
+world.addContactMaterial(new CANNON.ContactMaterial(physicsMat.tire, physicsMat.wall,  { friction: 0.8, restitution: 0.2 }));
+
+// ===== Track (Silverstone-ish spline) =====
+//
+// The points approximate Silverstone’s layout in meters scale (very rough).
+// Feel free to refine with GPS or CAD points for higher fidelity.
+//
+const trackPoints = [
+  [   0,   0], [ 180,-40], [ 320,-20], [ 490, 60], [ 580,180],
+  [ 520,300], [ 390,350], [ 260,360], [ 120,310], [ -20,250],
+  [-120,140], [-170, 20], [-220,-120], [-180,-220], [ -60,-300],
+  [  80,-320], [ 220,-300], [ 300,-220], [ 260,-120], [ 160,-40],
+  [   0,   0], // close loop
+];
+const scale = 1.0;
+const cp = trackPoints.map(p => new THREE.Vector3(p[0]*scale, 0, p[1]*scale));
+const curve = new THREE.CatmullRomCurve3(cp, true, 'catmullrom', 0.15);
+
+function buildTrackMesh(opts={}) {
+  const { width=12, segments=1200, curbWidth=1.0 } = opts;
+  const geom = new THREE.BufferGeometry();
+  const left = [], right = [], uvs = [], positions = [], normals = [], indices = [];
+
+  let prevTangent = new THREE.Vector3(1,0,0);
+  for (let i=0; i<=segments; i++){
+    const t = i/segments;
+    const p = curve.getPoint(t);
+    const tangent = curve.getTangent(t);
+    const dir = tangent.clone().normalize();
+    if (dir.lengthSq() < 1e-6) dir.copy(prevTangent);
+    prevTangent.copy(dir);
+    const side = new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0), dir).normalize();
+    const l = p.clone().addScaledVector(side,  width*0.5);
+    const r = p.clone().addScaledVector(side, -width*0.5);
+    left.push(l); right.push(r);
+  }
+  for (let i=0;i<left.length;i++){
+    const l = left[i], r = right[i];
+    positions.push(l.x,0,l.z,  r.x,0,r.z);
+    normals.push(0,1,0, 0,1,0);
+    const u = i/left.length;
+    uvs.push(u,0, u,1);
+    if (i<left.length-1){
+      const a=2*i, b=2*i+1, c=2*i+2, d=2*i+3;
+      indices.push(a,b,c, b,d,c);
+    }
+  }
+  geom.setIndex(indices);
+  geom.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+  geom.setAttribute('normal',   new THREE.Float32BufferAttribute(normals,3));
+  geom
