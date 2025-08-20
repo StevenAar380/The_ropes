@@ -9,7 +9,7 @@ for n in range(1, 11):
     plt.plot(x, x**n, label=f"x^{n}")
 
 # --- Plot roots ---
-for n in range(2, 11):
+for n in range(1, 11):
     plt.plot(x, x**(1/n), linestyle="--")  # dashed for roots
 
 # Styling
