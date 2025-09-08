@@ -1,7 +1,14 @@
 import sys
+import csv
 
 def addlostitem():
-    print("function called 1")
+    lostItemdict = {
+    }
+    descript = input("Enter item description>> ")
+    descript.append(lostItemdict)
+    print(lostItemdict)
+    
+
 
 
 def lostItemSearch():
@@ -21,7 +28,7 @@ def menu():
     print("2 Item search by keyword")
     print("3 Show all items")
     print("4 exit")
-    choice = input("(choose a number)>>>")
+    choice = input("(choose a number)>>> ")
     if choice == "1":
         addlostitem()
     elif choice == "2":
