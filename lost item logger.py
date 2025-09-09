@@ -1,12 +1,40 @@
 import sys
-import csv
+import csv, os
 
 def addlostitem():
+    global lostItemlist
     lostItemlist = {
+        "Description": None,
+        "Location": None,
+        "Tube": None,
+        "Heading": None,
+        "Date (DD/MM/YY)": None
     }
     
+    description = input("Enter item discription>>>")
+    location = input("Enter item location>>> ")
+    tube = input("Enter item tube")
+    heading = input("What is the heading>>> ")
+    date = input("Enter date found>>> ")
 
+    lostItemlist["Description"] = description
+    lostItemlist["Location"] = location
+    lostItemlist["Tube"] = tube
+    lostItemlist["Heading"] = heading
+    lostItemlist["Date (DD/MM/YY)"] = date
 
+    filename = "lostItemslistTester.csv"
+    fileExists = os.path.isfile(filename)
+
+    with open(filename,"a" , newline="", encoding = "utf-8") as f:
+        fieldnames = ["Description", "Location", "Heading", "Date (DD/MM/YY)"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        #Only write header if new
+        if not fileExists:
+            writer.writeheader()
+        #Append to dictionary
+        writer.writerow(lostItemlist)      
+        print("Item successfully added")
 
 def lostItemSearch():
     print("function called 2")
