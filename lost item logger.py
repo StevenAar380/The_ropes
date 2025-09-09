@@ -2,11 +2,8 @@ import sys
 import csv
 
 def addlostitem():
-    lostItemdict = {
+    lostItemlist = {
     }
-    descript = input("Enter item description>> ")
-    descript.append(lostItemdict)
-    print(lostItemdict)
     
 
 
