@@ -15,11 +15,11 @@ def addlostitem():
         "Date (DD/MM/YY)": None
     }
     #User input
-    description = input("Enter item discription>>>")
+    description = input("Enter item discription>>> ")
     location = input("Enter item location>>> ")
-    tube = input("Enter item tube")
+    tube = input("Enter tube line>>> ")
     heading = input("What is the heading>>> ")
-    date = input("Enter date found>>> ")
+    date = input("Enter date found(DD/MM/YY) >>> ")
     #Assigning key value pairs for dictionary   
     lostItemlist["Description"] = description
     lostItemlist["Location"] = location
@@ -32,7 +32,7 @@ def addlostitem():
     fileExists = os.path.isfile(filename)
 
     with open(filename,"a" , newline="", encoding = "utf-8") as f:
-        fieldnames = ["Description", "Location", "Heading", "Date (DD/MM/YY)"]
+        fieldnames = ["Description", "Location", "Tube", "Heading", "Date (DD/MM/YY)"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         #Only write header if new
         if not fileExists:
@@ -57,12 +57,14 @@ def showAllItems():
             reader = csv.reader(f)
             for row in reader:
                 print(row)
+            
 
 
 
 
 
 def menu():
+    print("=================================================================================")
     print("What would you like to do:")
     print("1 Add lost items")
     print("2 Item search by keyword")
@@ -86,7 +88,6 @@ def menu():
 def greeting():
     print("=================================================================================")
     print("Welcome to the tfl lost item logger")
-    print("=================================================================================")
     menu()
 
 greeting()
