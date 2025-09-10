@@ -5,7 +5,7 @@ def addlostitem():
     #global variablesd
     global lostItemlist
     global filename
-    global fileExists
+    print("=================================================================================")
     #Initial Empty Dictionary - will be appended to .csv
     lostItemlist = {
         "Description": None,
@@ -48,6 +48,7 @@ def lostItemSearch():
 
 
 def showAllItems():
+    print("=================================================================================")
     filename = "lostItemslist.csv" 
     if not os.path.exists(filename):       # fresh check every time
         print("File doesn't exist")
@@ -57,9 +58,10 @@ def showAllItems():
             reader = csv.reader(f)
             for row in reader:
                 print(row)
+            print("-----------------------If complete, press enter:----------------------------")
+            finished = input("> ")
+            menu()
             
-
-
 
 
 
