@@ -34,3 +34,4 @@ with open(filename, newline="", encoding="utf-8") as f:
     for row in reader:
         print(row)
 
+print("Your item has been successfully added")

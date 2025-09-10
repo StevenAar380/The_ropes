@@ -2,7 +2,11 @@ import sys
 import csv, os
 
 def addlostitem():
+    #global variablesd
     global lostItemlist
+    global filename
+    global fileExists
+    #Initial Empty Dictionary - will be appended to .csv
     lostItemlist = {
         "Description": None,
         "Location": None,
@@ -10,20 +14,21 @@ def addlostitem():
         "Heading": None,
         "Date (DD/MM/YY)": None
     }
-    
+    #User input
     description = input("Enter item discription>>>")
     location = input("Enter item location>>> ")
     tube = input("Enter item tube")
     heading = input("What is the heading>>> ")
     date = input("Enter date found>>> ")
-
+    #Assigning key value pairs for dictionary   
     lostItemlist["Description"] = description
     lostItemlist["Location"] = location
     lostItemlist["Tube"] = tube
     lostItemlist["Heading"] = heading
     lostItemlist["Date (DD/MM/YY)"] = date
-
-    filename = "lostItemslistTester.csv"
+    #Assigning variable to the filename
+    filename = "lostItemslist.csv"
+    #Conditional to ensure the dictionary isn't overwritten 
     fileExists = os.path.isfile(filename)
 
     with open(filename,"a" , newline="", encoding = "utf-8") as f:
@@ -35,6 +40,7 @@ def addlostitem():
         #Append to dictionary
         writer.writerow(lostItemlist)      
         print("Item successfully added")
+    menu()
 
 def lostItemSearch():
     print("function called 2")
@@ -42,7 +48,16 @@ def lostItemSearch():
 
 
 def showAllItems():
-    print("function called 3")
+    filename = "lostItemslist.csv" 
+    if not os.path.exists(filename):       # fresh check every time
+        print("File doesn't exist")
+        menu()
+    else:
+        with open(filename, newline="", encoding = "utf-8") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                print(row)
+
 
 
 
