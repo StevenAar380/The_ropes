@@ -1,30 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 
-#Define the exponential function:
-def exponential(x, b=2):
-    return b ** x
+# X range
+x = np.linspace(0, 1, 500)  # start at 0 to avoid negative roots
 
+# --- Plot powers ---
+for n in range(1, 11):
+    plt.plot(x, x**n, label=f"x^{n}")
 
-#Generating x values
-x = np.linspace(-6, 6, 400)
+# --- Plot roots ---
+for n in range(1, 11):
+    plt.plot(x, x**(1/n), linestyle="--")  # dashed for roots
 
-#Calculating y values
-y = exponential(x)
-
-#Plotting the graph
-plt.plot(x, y, label="y = 2^x")
-
-#Laying out the graph
-plt.title("Expnential graph")
+# Styling
+plt.ylim(0, 1)  # limit y so large powers don't dominate
 plt.xlabel("x")
 plt.ylabel("y")
+plt.title("Powers and Roots")
 plt.grid(True)
-
-#Adding axis:
-plt.axhline(0, color='black', linewidth=0.5)
-plt.axvline(0, color='black', linewidth=0.5)
-
-
+plt.legend()
 plt.show()
