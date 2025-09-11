@@ -43,8 +43,12 @@ def addlostitem():
     menu()
 
 def lostItemSearch():
-    print("function called 2")
-
+    keyword = input("Enter your item>>> ")
+    while keyword.isdigit():
+        print("Invalid, string input only")
+        lostItemSearch()
+        
+    
 
 
 def showAllItems():

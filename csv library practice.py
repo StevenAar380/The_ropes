@@ -1,37 +1,36 @@
 import csv, os
 
-lostItems = {
-    "Description": None,
-    "Location": None,
-    "Heading": None,
-    "Date (DD/MM/YY)": None
+Review = {
+    'Name': None,
+    'year group': None,
+    'Form': None,
+    'Form tutor': None,
+
 }
 
-description = input("Enter item discription>>>")
-location = input("Enter item location>>> ")
-heading = input("What is the heading>>> ")
-date = input("Enter date found>>> ")
+name = input("Enter your name: ")
+yeargroup = input("Enter your year group:  ")
+form = input("Enter your form class: ")
+formtutor = input("Enter your form tutor name (miss/mister): ")
 
-lostItems["Description"] = description
-lostItems["Location"] = location
-lostItems["Heading"] = heading
-lostItems["Date (DD/MM/YY)"] = date
+Review['Name'] = name
+Review['year group'] = yeargroup
+Review['Form'] = form
+Review['Form tutor'] = formtutor
 
-filename = "lostItemslistTester.csv"
+filename = "School system.csv"
 fileExists = os.path.isfile(filename)
 
-with open(filename,"a" , newline="", encoding = "utf-8") as f:
-    fieldnames = ["Description", "Location", "Heading", "Date (DD/MM/YY)"]
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
-    #Only write header if new
+
+with open(filename ,'a' ,newline='' , encoding='utf-8') as f:
+    fileheader = ['Name', 'year group', 'Form', 'Form tutor']
+    writer = csv.DictWriter(f, fieldnames=fileheader)
     if not fileExists:
         writer.writeheader()
-    #Append to dictionary
-    writer.writerow(lostItems)  
+    writer.writerow(Review)
 
-with open(filename, newline="", encoding="utf-8") as f:
-    reader = csv.reader(f)
+with open(filename, newline='' ,encoding='utf-8') as f:
+    reader= csv.reader(f)
     for row in reader:
         print(row)
-
-print("Your item has been successfully added")
+print("You are officially on the system!! ")
