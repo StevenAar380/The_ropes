@@ -20,6 +20,7 @@ def addlostitem():
     tube = input("Enter tube line>>> ")
     heading = input("What is the heading>>> ")
     date = input("Enter date found(DD/MM/YY) >>> ")
+
     #Assigning key value pairs for dictionary   
     lostItemlist["Description"] = description
     lostItemlist["Location"] = location
@@ -43,12 +44,30 @@ def addlostitem():
     menu()
 
 def lostItemSearch():
-    keyword = input("Enter your item>>> ")
+    print("=================================================================================")
+    #Redifining filename
+    filename = "lostItemslist.csv"
+    keyword = input("Enter your item>>> ") #Item input
     while keyword.isdigit():
         print("Invalid, string input only")
         lostItemSearch()
+    with open(filename, "r", encoding="utf-8") as f: 
+        csvfile = csv.reader(f, delimiter=",") #reader
+        kw = keyword.strip().lower() # 
+        found = False
+        for row in csvfile:
+            desc = row[0].strip().lower() 
+            if kw in desc: #search function 
+                print(row)
+                found = True
+                print("-" * 72)
+            menu()
+        if not found:
+            print("-" * 72)
+            print("No item found")
+            menu()
+
         
-    
 
 
 def showAllItems():
@@ -65,6 +84,7 @@ def showAllItems():
             print("-----------------------If complete, press enter:----------------------------")
             finished = input("> ")
             menu()
+
             
 
 
