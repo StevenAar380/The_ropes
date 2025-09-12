@@ -1,46 +1,46 @@
+import sys
+
 guest = {
 }
-
 
 def main():
     print("=" * 72)
     print("Hello RANI!")
     nameinput()
-    dictAdd(name, age, total)
 
 
 
 def nameinput():
     total = 0
+    yperson = ""
+    total18 = 0
     while True:
         tname = input("Enter the name: ")
-        tage = input("Enter age: ")
-        if tname = 
-
-def dictAdd():
-    pass
-
-a = nameinput()
-print(a)
-
-'''def bookdisplay():
-    for name, grade in gradeBook.items():
+        tage = int(input("Enter age: "))
+        if tage < tage:
+            yperson = tname
+        if tage >= 18:
+            total18 += 1
+        if tname == "done" or tage == "done":
+            break
+        total += 1
+        guest[tname] = tage
+        dictAdd(tname, tage, total,yperson, total18)
+    
+def dictAdd(name, age, total,yperson, total18):
+    for name, age in guest.items():
         print(f"""
-        ------------------------------------
-        student: {name} | Grade: {grade}
-        ------------------------------------
+        -----------------------------------
+        Student: {name} | Grade: {age}             
         """)
 
+    stats(total,yperson, total18)
+    
 
-print("========================================")
-print("========================================")
-print("Welcome to the Student Gradebook Manager")
-while True:
-    tname = input("enter the name>>> ")
-    tgrade = input("Enter their grade>>> ")
-    if tname == "done" or tgrade == "done":
-        break
-    gradeBook[tname] = tgrade
+def stats(total,yperson, total18):
+    print(f"The total number of guests are {total}")
+    print(f"the youngest person was {yperson}")
+    print(f"the total number of people over 18 was {total18}")
+    sys.exit()
 
-bookdisplay()
-print(gradeBook)  '''  
+main()
