@@ -5,7 +5,7 @@ def addlostitem():
     #global variablesd
     global lostItemlist
     global filename
-    global fileExists
+    print("=================================================================================")
     #Initial Empty Dictionary - will be appended to .csv
     lostItemlist = {
         "Description": None,
@@ -20,6 +20,7 @@ def addlostitem():
     tube = input("Enter tube line>>> ")
     heading = input("What is the heading>>> ")
     date = input("Enter date found(DD/MM/YY) >>> ")
+
     #Assigning key value pairs for dictionary   
     lostItemlist["Description"] = description
     lostItemlist["Location"] = location
@@ -43,11 +44,34 @@ def addlostitem():
     menu()
 
 def lostItemSearch():
-    print("function called 2")
+    print("=================================================================================")
+    #Redifining filename
+    filename = "lostItemslist.csv"
+    keyword = input("Enter your item>>> ") #Item input
+    while keyword.isdigit():
+        print("Invalid, string input only")
+        lostItemSearch()
+    with open(filename, "r", encoding="utf-8") as f: 
+        csvfile = csv.reader(f, delimiter=",") #reader
+        kw = keyword.strip().lower() # 
+        found = False
+        for row in csvfile:
+            desc = row[0].strip().lower() 
+            if kw in desc: #search function 
+                print(row)
+                found = True
+                print("-" * 72)
+            menu()
+        if not found:
+            print("-" * 72)
+            print("No item found")
+            menu()
 
+        
 
 
 def showAllItems():
+    print("=================================================================================")
     filename = "lostItemslist.csv" 
     if not os.path.exists(filename):       # fresh check every time
         print("File doesn't exist")
@@ -57,9 +81,11 @@ def showAllItems():
             reader = csv.reader(f)
             for row in reader:
                 print(row)
+            print("-----------------------If complete, press enter:----------------------------")
+            finished = input("> ")
+            menu()
+
             
-
-
 
 
 
