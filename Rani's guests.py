@@ -47,7 +47,7 @@ def stats(total,yperson, total18):
     print("=" * 72)
     print(f"The total number of guests are {total}")
     print(f"the youngest person was {yperson}")
-    print(f"the total number of people over 18 was {total18}")
+    print(f"the total number of guests over 18 was {total18}")
     print("=" * 72)
     sys.exit()
 
