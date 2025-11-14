@@ -35,9 +35,8 @@ def nameinput():
     
 def dictAdd(name, age, total,yperson, total18):
     for name, age in guest.items():
-        print(f"""
-        -----------------------------------
-        Student: {name} | Age: {age}             
+                print(f"""-----------------------------------
+        Student: {name} | Age: {age}
         """)
 
     stats(total,yperson, total18)
