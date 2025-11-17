@@ -1,4 +1,4 @@
-list = [9,2,5,4,6,3,7,8]
+numbers = [9,2,5,4,6,3,7,8]
 sorted_list = []
 
 print(f"Original list: {list}")
@@ -17,10 +17,9 @@ for i in range (1, len(list)):
             if list[i] < sorted_list[j]:
                 if j == 0:
                     sorted_list.insert(0, list[i])
-                continue
+                break
             else:
                 sorted_list.insert(j+1, list[i])
                 break
         print(sorted_list)
-                
 
