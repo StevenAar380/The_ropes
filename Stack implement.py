@@ -7,8 +7,13 @@ def push():
     print(items)
 
 def pop():
-    print(f"item retrieved: {items[len(items)-1]}")
+    items.remove(items.remove[len(items)-1])
+    print("item removed")
+    print(items)
 
+def top():
+    print(f"item peeked: {items[len(items)-1]}")
+    
 
 def main():
     print("="*72)
@@ -22,8 +27,8 @@ def main():
         push()
     elif choice == "2":
         pop()
-    #elif choice == 3:
-        #top()
+    elif choice == 3:
+        top()
     elif choice == "4":
         exit()
     else:
@@ -31,9 +36,6 @@ def main():
         print("Invalid Input - please enter a number only")
         main()
 
-        
-
-
 print("-" * 72)
-print("HELLOOOOOOO")
+print("Initializing...")
 main()
