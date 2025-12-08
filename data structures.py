@@ -1,8 +1,22 @@
-items = [1,2,3,4,5,6,7,8,9,10]
+items = [1,2,7,4,5,6,3,8,9,10]
 
-for i in range(0, len(items)-1):
-    for j in range(1, len(items)):
-        if i < j:
-            print("Ordered")
-        else:
-            print("Disordered")
+class Stack():
+    def stackMenu(items):
+        print("-" * 72)
+        print("How would you like to interact with your stack?")
+        print()
+
+
+def main():
+    global items
+    print("-" * 72)
+    print("What data functionality would you like to use:")
+    print("1 - Stack")
+    print("2 - Queue")
+    choice = input(">>> ")
+
+    if choice == "1":
+        stack = Stack()
+        stack.stackMenu()
+
+main()
