@@ -1,6 +1,13 @@
 
-library = [["1984", "George Orwell","Dystopian"],["The Martian", "Andy Weir", "Sci-fi"],["Henry V", "William Shakespeare", "History"]]
+library = [["1984", "George Orwell","Dystopian","free"],
+           ["The Martian", "Andy Weir", "Sci-fi","free"],
+           ["Henry V", "William Shakespeare", "History","free"]
+           ]
 
+print(library[0])
+
+
+'''
 
 class Student:
     def __init__(self, username, age):
@@ -8,15 +15,19 @@ class Student:
         self.age = age
 
 class Books:
-    def __init__(self, bookname, bookauthor, genre):
+    def __init__(self, bookname, bookauthor, genre, status):
+        library 
         self.bookname = bookname
         self.bookauthor = bookauthor
         self.genre = genre
+        self.status = status
+
 
     def libraryRead():
         for i in range (0, 3):
-            temp = library[i][0]
-        return temp
+            print(f"{i+1}. {library[i][0]}")
+        return
+
 
 def bookmenu():
     print("What would you like to do in the library today:")
@@ -27,9 +38,10 @@ def bookmenu():
     print("4 - Remove a book")
     choice = input("Choose a number: ")
     if choice == "1":
-        temp = Books.libraryRead()
-        print(temp)
         print("What book would you like to borrow")
+        Books.libraryRead()
+        decision = input("enter a number:")
+        
     elif choice == "2":
         ...
     elif choice == "3":
@@ -41,8 +53,6 @@ def bookmenu():
         bookmenu()
 
 def userInput():
-    print("-" * 72)
-    print("Hello there")
     input_name = input("Enter full name: ") 
     input_age = input("Enter age")
     #creating object
@@ -55,4 +65,4 @@ def userInput():
 
 print("-" * 72)
 print("Hello there")
-userInput()
+userInput()'''
