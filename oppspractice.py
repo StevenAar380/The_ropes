@@ -24,8 +24,6 @@ class Books:
             Libbooks = Libbooks(record[0], record[1], record[2], record[3])
             Libbooks.append(Books)
 
-
-
     def libraryRead():
         for i in range (0, 3):
             print(f"{i+1}. {library[i][0]}")
@@ -35,28 +33,41 @@ class Books:
         self.borrowed = True
         
 
+def bookborrow():
+    print("What book would you like to borrow")
+    Books.libraryRead()
+    decision = input("enter a number:")
+    if decision == "1":
+        Books.libraryRead(int(decision))
+        print(library)
+    
+
+
+def bookreturn():
+    ...
+
+def bookadd():
+    ...
+
+
 
 def bookmenu():
+    print("-" * 72)
     print("What would you like to do in the library today:")
     #Options to take at library
     print("1 - Borrow a book")
     print("2 - Return a book")
     print("3 - Add a book")
-    print("4 - Remove a book")
+    print("4 - quit")
     choice = input("Choose a number: ")
     if choice == "1":
-        print("What book would you like to borrow")
-        Books.libraryRead()
-        decision = input("enter a number:")
-        if decision == "1":
-            ...
-        
+        bookborrow()
     elif choice == "2":
-        ...
+        bookreturn()
     elif choice == "3":
-        ...
+        bookadd()
     elif choice == "4":
-        ...
+        exit()
     else:
         print("Invalid Input")
         bookmenu()
