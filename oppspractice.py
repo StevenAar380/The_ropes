@@ -18,36 +18,59 @@ class Books:
         self.genre = genre
         self.borrowed = borrowed
 
-        Libbooks = []
-
-        for record in library:
-            Libbooks = Libbooks(record[0], record[1], record[2], record[3])
-            Libbooks.append(Books)
-
     def libraryRead():
-        for i in range (0, 3):
+        for i in range (0, len(library)):
             print(f"{i+1}. {library[i][0]}")
         return
     
-    def librarybookborrow(self):
-        self.borrowed = True
-        
+    def librarybookborrow(decision): 
+        decision = int(decision)
+        library[decision-1][3] = True
+        return
+
+    def librarybookreturn(decision):
+        decision = int(decision)
+        if library[decision-1][3] == False:
+            return print("you can't return something you never took -_- ")
+        library[decision-1][3] = False
+        return
+    
+    def librarybookadd(name, author, genre):
+        library.append([name, author, genre, False])
+        return
+    
 
 def bookborrow():
     print("What book would you like to borrow")
     Books.libraryRead()
     decision = input("enter a number:")
-    if decision == "1":
-        Books.libraryRead(int(decision))
-        print(library)
-    
+    while decision.isdigit() == False or int(decision) > len(library) or int(decision) < 1:
+        print("invalid")
+        bookborrow()
+    Books.librarybookborrow(decision)
+    print(library)
+    bookmenu()
 
 
 def bookreturn():
-    ...
+    print("What book would you like to return")
+    Books.libraryRead()
+    decision = input("enter a number:")
+    while decision.isdigit() == False or int(decision) > len(library):
+        print("invalid")
+        bookreturn()
+    Books.librarybookreturn(decision)
+    print(library)
+    bookmenu()
 
 def bookadd():
-    ...
+    print("Very well")
+    name = input("Enter name: ")
+    author = input("Enter author: ")
+    genre = input("Enter genre: ")
+    Books.librarybookadd(name, author, genre)
+    print(library)
+    bookmenu()
 
 
 
